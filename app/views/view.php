@@ -4,7 +4,9 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title><?= $page_title; ?> - CoMa NDI</title>
+
+    <title><?php $page_title; ?> - CoMa NDI</title>
+
     <!-- On charge les icônes du site -->
     <link rel="icon" type="image/png" href="assets/img/icons/qlqchose.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="assets/img/icons/qlqchose.png" sizes="64x64" />

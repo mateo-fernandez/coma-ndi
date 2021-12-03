@@ -4,10 +4,10 @@ class Conf {
   private static $debug = true;
 
   private static $databases = array(
-      'hostname' => '',
-      'database' => '',
-      'login' => '',
-      'password' => ''
+      'hostname' => 'mysql-coma-ndi.alwaysdata.net',
+      'database' => 'coma-ndi_bd',
+      'login' => 'coma-ndi',
+      'password' => 'NdPSLBvZZPtm3Kp'
   );
 
   public static function getLogin(): string {

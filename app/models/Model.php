@@ -1,78 +1,159 @@
 <?php
-require_once File::getApp(array("lib", "Conf.php"));
+require_once File::getApp(["lib","Conf.php"]);
 
-class Model {
-  private static $pdo;
+abstract class Model{
+    private static $pdo = null;
 
-  private static function init() {
-    $hostname = Conf::getHostname();
-    $database_name = Conf::getDatabase();
-    $login = Conf::getLogin();
-    $password = Conf::getPassword();
-
-    try {
-      self::$pdo = new PDO("mysql:host=$hostname;dbname=$database_name;charset=utf8", $login, $password);
-    } catch (PDOException $e) {
-      if (Conf::getDebug()) {
-        echo $e->getMessage(); // affiche un message d'erreur
-      } else {
-        echo "Une erreur est survenue <a href=\"\"> retour a la page d'accueil </a>";
-      }
-      die();
-    }
-  }
-
-  public static function getPdo() {
-    if (is_null(self::$pdo))
-      Model::init();
-    return self::$pdo;
-  }
-
-  // -- CRUD Methods ---
-
-  public static function selectAll() {
-    $table_name = static::$object;
-    $class_name = "Model" . ucfirst($table_name);
-    // TODO: changer le nom de la BD
-    $sql = "SELECT * FROM `proj__" . $table_name . "`;";
-    try {
-      $db = self::getPdo();
-      $rep = $db->query($sql);
-      $rep->setFetchMode(PDO::FETCH_CLASS, $class_name);
-      $tab = $rep->fetchAll();
-
-    } catch (PDOException $e) {
-      if (Conf::getDebug()) {
-        echo $e->getMessage();
-      }
-      return false;
+    private static function init() {
+        try {
+            self::$pdo = new PDO("mysql:host=".Conf::getHostname().";dbname=".Conf::getDatabase(),Conf::getLogin(), Conf::getPassword(), array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+            self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            if (Conf::getDebug()) {
+                echo $e->getMessage(); // affiche un message d'erreur
+            } else {
+                echo 'Une erreur est survenue <a href=""> retour a la page d\'accueil </a>';
+            }
+            die();
+        }
     }
 
-    return $tab ?? false;
-  }
-
-  public static function select($primaryValue) {
-    $table_name = static::$object;
-    $class_name = "Model" . ucfirst($table_name);
-    $pkey = static::$primary;
-    //TODO: changer le nom de la BD
-    $sql = "SELECT * FROM `proj__" . $table_name . "` WHERE `" . $pkey . "`=:tag;";
-    try {
-
-      $db = self::getPdo();
-      $rep = $db->prepare($sql);
-      $rep->execute(array("tag" => $primaryValue));
-      $rep->setFetchMode(PDO::FETCH_CLASS, $class_name);
-      $el = $rep->fetch();
-    } catch (PDOException $e) {
-      if (Conf::getDebug()) {
-        echo $e->getMessage();
-      }
-      return false;
+    public function __construct($data = NULL){
+        if(!is_null($data)){
+            $this->hydrate($data);
+        }
     }
 
-    return $el ?? false;
-  }
+    protected static function getPdo() {
+        if (is_null(self::$pdo)) self::init();
+        return self::$pdo;
+    }
 
+    public function hydrate($data = NULL){
+        foreach ($data as $attribut => $value){
+            $this->set($attribut,$value);
+        }
+    }
+
+    //getter
+    public function get($attribut){
+        if(property_exists($this,$attribut)){
+            return $this->$attribut;
+        }
+        return null;
+    }
+
+    // setters
+
+    public function set($attribut, $value){
+        $method = "set".ucfirst($attribut);
+        if(method_exists($this,$method)){
+            $this->$method($value);
+        }
+        else{
+            if(property_exists($this,$attribut)){
+                $this->$attribut = $value;
+            }
+        }
+    }
+
+    public static function selectAll(): array{
+        try{
+            $table_name = ucfirst(static::$objet);
+            $class_name = "Model".ucfirst(static::$objet);
+            $rep = self::getPdo()->query(
+                "SELECT * FROM $table_name "
+            );
+
+            $rep->setFetchMode(PDO::FETCH_CLASS, $class_name);
+            return $rep->fetchAll();
+        }
+        catch(PDOException $e){
+            if (Conf::getDebug()) {
+                echo $e->getMessage(); // affiche un message d'erreur
+            } else {
+                echo 'Une erreur est survenue <a href=""> retour a la page d\'accueil </a>';
+            }
+            die();
+        }
+    }
+
+    public static function select($primary_value) {
+        try {
+            $table_name = ucfirst(static::$objet);
+            $class_name = "Model".ucfirst(static::$objet);
+            $primary_key = static::$primary;
+
+            $req_prep = Model::getPDO()->prepare("SELECT * from $table_name WHERE $primary_key =:primarykey");
+
+            $req_prep->execute(array(
+                "primarykey" => $primary_value
+            ));
+
+            $req_prep->setFetchMode(PDO::FETCH_CLASS, $class_name);
+            $object = $req_prep->fetch();
+
+            // Attention, si il n'y a pas de résultats, on renvoie false
+            if (empty($object))
+                return false;
+            return new $class_name($object);
+
+        } catch (PDOException $e) {
+            if (Conf::getDebug()) {
+                echo $e->getMessage(); // affiche un message d'erreur
+            } else {
+                echo 'Une erreur est survenue <a href=""> retour a la page d\'accueil </a>';
+            }
+            die();
+        }
+    }
+
+    public static function delete($primary_value){
+        try{
+            $table_name = ucfirst(static::$objet);
+            $primary_key = static::$primary;
+
+            $req_prep = Model::getPdo()->prepare(
+                "DELETE FROM $table_name WHERE $primary_key=:primarykey"
+            );
+            $req_prep->execute([
+                'primarykey' => $primary_value,
+            ]);
+        }catch(PDOException $e){
+            if (Conf::getDebug()) {
+                echo $e->getMessage(); // affiche un message d'erreur
+            } else {
+                echo 'Une erreur est survenue <a href=""> retour a la page d\'accueil </a>';
+            }
+            die();
+        }
+    }
+
+    public static function update($data){
+        $table_name = ucfirst(static::$objet);
+        $primary_key = static::$primary;
+
+        try{
+            $string = "";
+            foreach($data as $key => $value){
+                if($key != $primary_key) {
+                    $string .= $key . "=:" . $key . ",";
+                    echo $value;
+                }
+            }
+            $string = rtrim($string,",");
+            echo "UPDATE $table_name SET $string WHERE $primary_key = $data[$primary_key]";
+            $req_prep = Model::getPdo()->prepare(
+                "UPDATE $table_name SET $string WHERE $primary_key = :$primary_key"
+            );
+            $req_prep->execute($data);
+        }catch(PDOException $e){
+            if (Conf::getDebug()) {
+                echo $e->getMessage(); // affiche un message d'erreur
+            } else {
+                ControllerGeneral::error();
+            }
+            die();
+        }
+    }
 }
-
