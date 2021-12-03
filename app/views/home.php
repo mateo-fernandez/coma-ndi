@@ -1,16 +1,19 @@
 <h1>Accueil</h1>
-<form action="?a=query&c=sengine" method="get">
-    <label>
-        <input id="q" type="text"/>
-        <input type="submit" value="Envoyer" hidden>
-    </label>
-</form>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto at consequuntur dolorum est expedita, ipsa ipsum
-    laborum magnam mollitia nemo nulla omnis qui rem repellendus sapiente soluta velit veritatis voluptas.
-    Ad culpa cupiditate dignissimos dolor incidunt molestias mollitia obcaecati officia optio placeat quas, repellat
-    saepe velit. Aspernatur corporis deleniti illo inventore, ipsa laudantium magnam minus molestiae obcaecati
-    reiciendis sequi sint!</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi, aspernatur atque dignissimos dolore ea error iusto
-    nesciunt officiis quo recusandae sint temporibus ullam vero. Eius eligendi ipsam modi sint totam?
-    A alias at eaque earum, excepturi facere molestias obcaecati odio provident quibusdam ratione repellat soluta ut!
-    Aliquam amet culpa dolores eos excepturi illum, porro rerum suscipit, tenetur ullam unde vero.</p>
+<div class="align-self-center mbt-3 mb-3">
+    <?php require File::getApp(array("views", "element", "searchbar.php")); ?>
+</div>
+<p>Bienvenue sur le site des sauveteurs du dunkerquois. Ce site rend hommage aux femmes, hommes et enfants qui ont
+    réalisé des actes de sauvetages en milieu aquatique.<br>
+    Ces sauveteurs, habitants du dunkerquois (de Bray-Dunes à Grand-Fort-Philippe), ont participé à plus de 900
+    sauvetages en mer et plus de 1100 sauvetages individuels. Œuvrant avec courage, abnégation et souvent au mépris du
+    risque ils méritent amplement que leurs actes soient pérennisés.</p>
+<img class="mb-2" src="https://sauveteurdudunkerquois.fr/wp-content/uploads/2021/09/BANNIERE-COMPLETE-2048x679-1.jpg"
+     alt="Bannière sauveteurs du dunkerquois">
+<p>La citation ci-dessous, signée Arsène Bossu, à un journaliste du Grand Echo du Nord de la France en 1932, résume à
+    elle seule l’état d’esprit des sauveteurs du Dunkerquois.</p>
+<blockquote class="blockquote rounded" style="border-left: .25rem solid #4b4848; padding-left: 1rem;">
+    Les sauvetages&nbsp;? Mais tout le monde en fait…<br/>
+    Si un homme tombe dans la «&nbsp;Baille&nbsp;»<br/>
+    est ce qu’on ne va pas le chercher&nbsp;?<br/>
+    Il n’y a à cela aucun mérite…
+</blockquote>
