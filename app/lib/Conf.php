@@ -31,7 +31,7 @@ class Conf {
   }
 
   public static function getUrlRoot(): string {
-    return "";
+    return "/coma/";
   }
 
 }
