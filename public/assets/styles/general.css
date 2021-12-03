@@ -23,6 +23,10 @@ body {
     text-align: center;
 }
 
+div.container-fluid {
+    max-width: 90% !important;
+}
+
 form#searchbar {
     flex-wrap: nowrap;
 }
