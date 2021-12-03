@@ -28,9 +28,9 @@
                             Compte <i class="fas fa-user-circle"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="?a=profile&c=user">Voir le profil</a></li>
-                            <li><a class="dropdown-item" href="?a=modify&c=user">Modifier le profil</a></li>
-                            <li><a class="dropdown-item" href="?a=deconnect&c=user">Se déconnecter</a></li>
+                            <li><a class="dropdown-item" href="#">Voir le profil</a></li>
+                            <li><a class="dropdown-item" href="#">Modifier le profil</a></li>
+                            <li><a class="dropdown-item" href="?action=disconnect&controller=user">Se déconnecter</a></li>
                         </ul>
                     </li>
                 <?php } else if ($_SESSION["isLogged"] == false) { ?>

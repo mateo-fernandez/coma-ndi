@@ -79,4 +79,10 @@ class ControllerUser {
             self::register();
         }
     }
+
+    public static function disconnect() {
+        $_SESSION["isLogged"] = false;
+        unset($_SESSION["userId"]);
+        Controller::home();
+    }
 }
