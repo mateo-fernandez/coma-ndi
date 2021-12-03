@@ -6,7 +6,7 @@ while ($fichierController = readdir($dossier)) {
     }
 }
 
-$action = $_GET['action'] ?? "";
+$action = $_GET['action'] ?? "home";
 $controller = $_GET['controller'] ?? "";
 $controller_class = "Controller" . ucfirst($controller);
 

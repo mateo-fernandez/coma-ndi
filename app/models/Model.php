@@ -1,12 +1,12 @@
 <?php
-require_once File::getApp(["lib","Conf.php"]);
+require_once File::getApp(["lib", "Conf.php"]);
 
-abstract class Model{
+abstract class Model {
     private static $pdo = null;
 
     private static function init() {
         try {
-            self::$pdo = new PDO("mysql:host=".Conf::getHostname().";dbname=".Conf::getDatabase(),Conf::getLogin(), Conf::getPassword(), array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+            self::$pdo = new PDO("mysql:host=" . Conf::getHostname() . ";dbname=" . Conf::getDatabase(), Conf::getLogin(), Conf::getPassword(), array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
             self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             if (Conf::getDebug()) {
@@ -18,8 +18,8 @@ abstract class Model{
         }
     }
 
-    public function __construct($data = NULL){
-        if(!is_null($data)){
+    public function __construct($data = NULL) {
+        if (!is_null($data)) {
             $this->hydrate($data);
         }
     }
@@ -29,15 +29,15 @@ abstract class Model{
         return self::$pdo;
     }
 
-    public function hydrate($data = NULL){
-        foreach ($data as $attribut => $value){
-            $this->set($attribut,$value);
+    public function hydrate($data = NULL) {
+        foreach ($data as $attribut => $value) {
+            $this->set($attribut, $value);
         }
     }
 
     //getter
-    public function get($attribut){
-        if(property_exists($this,$attribut)){
+    public function get($attribut) {
+        if (property_exists($this, $attribut)) {
             return $this->$attribut;
         }
         return null;
@@ -45,30 +45,28 @@ abstract class Model{
 
     // setters
 
-    public function set($attribut, $value){
-        $method = "set".ucfirst($attribut);
-        if(method_exists($this,$method)){
+    public function set($attribut, $value) {
+        $method = "set" . ucfirst($attribut);
+        if (method_exists($this, $method)) {
             $this->$method($value);
-        }
-        else{
-            if(property_exists($this,$attribut)){
+        } else {
+            if (property_exists($this, $attribut)) {
                 $this->$attribut = $value;
             }
         }
     }
 
-    public static function selectAll(): array{
-        try{
+    public static function selectAll(): array {
+        try {
             $table_name = ucfirst(static::$objet);
-            $class_name = "Model".ucfirst(static::$objet);
+            $class_name = "Model" . ucfirst(static::$objet);
             $rep = self::getPdo()->query(
                 "SELECT * FROM $table_name "
             );
 
             $rep->setFetchMode(PDO::FETCH_CLASS, $class_name);
             return $rep->fetchAll();
-        }
-        catch(PDOException $e){
+        } catch (PDOException $e) {
             if (Conf::getDebug()) {
                 echo $e->getMessage(); // affiche un message d'erreur
             } else {
@@ -81,15 +79,12 @@ abstract class Model{
     public static function select($primary_value) {
         try {
             $table_name = ucfirst(static::$objet);
-            $class_name = "Model".ucfirst(static::$objet);
+            $class_name = "Model" . ucfirst(static::$objet);
             $primary_key = static::$primary;
 
-            $req_prep = Model::getPDO()->prepare("SELECT * from $table_name WHERE $primary_key =:primarykey");
-
-            $req_prep->execute(array(
-                "primarykey" => $primary_value
-            ));
-
+            $sql = "SELECT * from $table_name WHERE $primary_key=:primarykey;";
+            $req_prep = Model::getPDO()->prepare($sql);
+            $req_prep->execute(array("primarykey" => $primary_value));
             $req_prep->setFetchMode(PDO::FETCH_CLASS, $class_name);
             $object = $req_prep->fetch();
 
@@ -108,8 +103,8 @@ abstract class Model{
         }
     }
 
-    public static function delete($primary_value){
-        try{
+    public static function delete($primary_value) {
+        try {
             $table_name = ucfirst(static::$objet);
             $primary_key = static::$primary;
 
@@ -119,7 +114,7 @@ abstract class Model{
             $req_prep->execute([
                 'primarykey' => $primary_value,
             ]);
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             if (Conf::getDebug()) {
                 echo $e->getMessage(); // affiche un message d'erreur
             } else {
@@ -129,25 +124,25 @@ abstract class Model{
         }
     }
 
-    public static function update($data){
+    public static function update($data) {
         $table_name = ucfirst(static::$objet);
         $primary_key = static::$primary;
 
-        try{
+        try {
             $string = "";
-            foreach($data as $key => $value){
-                if($key != $primary_key) {
+            foreach ($data as $key => $value) {
+                if ($key != $primary_key) {
                     $string .= $key . "=:" . $key . ",";
                     echo $value;
                 }
             }
-            $string = rtrim($string,",");
+            $string = rtrim($string, ",");
             echo "UPDATE $table_name SET $string WHERE $primary_key = $data[$primary_key]";
             $req_prep = Model::getPdo()->prepare(
                 "UPDATE $table_name SET $string WHERE $primary_key = :$primary_key"
             );
             $req_prep->execute($data);
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             if (Conf::getDebug()) {
                 echo $e->getMessage(); // affiche un message d'erreur
             } else {
