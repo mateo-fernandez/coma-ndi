@@ -4,10 +4,10 @@ class Conf {
   private static $debug = true;
 
   private static $databases = array(
-      'hostname' => 'mysql-coma-ndi.alwaysdata.net',
-      'database' => 'coma-ndi_bd',
-      'login' => 'coma-ndi',
-      'password' => 'NdPSLBvZZPtm3Kp'
+      'hostname' => '',
+      'database' => '',
+      'login' => '',
+      'password' => ''
   );
 
   public static function getLogin(): string {
@@ -31,7 +31,7 @@ class Conf {
   }
 
   public static function getUrlRoot(): string {
-    return "/coma/";
+    return "/";
   }
 
 }
