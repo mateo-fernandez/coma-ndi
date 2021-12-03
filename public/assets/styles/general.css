@@ -1,14 +1,16 @@
-/* Variables couleurs */
-
-
 html {
     height: 100%;
+}
+
+* {
+    transition: 0.25s;
 }
 
 body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    transition: 0.30s;
 }
 
 .main {
