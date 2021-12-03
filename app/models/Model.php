@@ -96,7 +96,7 @@ abstract class Model{
             // Attention, si il n'y a pas de résultats, on renvoie false
             if (empty($object))
                 return false;
-            return new $class_name($object);
+            return $object;
 
         } catch (PDOException $e) {
             if (Conf::getDebug()) {

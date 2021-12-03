@@ -15,6 +15,7 @@ class ControllerUtilisateur
         if(isset($_POST["adresseEmail"]) && isset($_POST["motDePasse"])){
             if( $user = ModelUtilisateur::select($_POST["adresseEmail"])){
                 if(Security::hash($_POST["motDePasse"]) == $user->get("motDePasse")){
+                    require_once File::getApp(["lib","Sessionutilisateur.php"]);
                     echo "oui";
                 }
                 else{
@@ -53,7 +54,7 @@ class ControllerUtilisateur
                 "prenom" => $_POST["prenom"],
                 "adresseEmail" => $_POST["adresseEmail"],
                 "motDePasse" => Security::hash($_POST["motDePasse"]),
-                "role" => "Colaborateur"
+                "role" => "Collaborateur"
            ]))->save();
         }
         else{
@@ -107,5 +108,10 @@ class ControllerUtilisateur
     public static function removed(){
         require_once File::getApp(["models","ModelUtilisateur.php"]);
 
+    }
+
+    public static function deconnexion(){
+        SessionUtilisateur::destroy();
+        header("Location: controller=utilisateur&action=connexion");
     }
 }

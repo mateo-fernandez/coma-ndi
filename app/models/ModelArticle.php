@@ -3,7 +3,7 @@ require_once File::getApp(["models","Model.php"]);
 
 class ModelArticle extends Model
 {
-    protected static $objet = "article";
+    protected static $objet = "bateau";
     protected static $primary = "idArticle";
 
     protected $idArticle;

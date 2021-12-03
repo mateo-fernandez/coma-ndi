@@ -2,10 +2,34 @@ html {
     height: 100%;
 }
 
+*{
+    color: var(--text-color);
+    transition: 0.25s;
+}
+
+html[data=dark]{
+    --main-color: #414141;
+    --secondary-color: red;
+    --text-color: #fff;
+}
+
+html[data=light]{
+    --main-color: #fff;
+    --secondary-color: #f8f9fa;
+    --text-color: #414141;
+
+}
+
+header{
+    background-color: var(--secondary-color) ;
+}
+
 body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    background: var(--main-color);
+    transition: 0.30s;
 }
 
 .main {

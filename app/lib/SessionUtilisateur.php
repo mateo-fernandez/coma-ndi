@@ -12,7 +12,7 @@ class SessionUtilisateur
 
     public static function getIdUtilisateur(){
         if(self::isCreate()){
-            return $_SESSION["user"]["email"];
+            return $_SESSION["user"]["idUtilisateur"];
         }
         return false;
     }
@@ -20,20 +20,6 @@ class SessionUtilisateur
     public static function getRole(){
         if(self::isCreate()){
             return $_SESSION["user"]["role"];
-        }
-        return false;
-    }
-
-    public static function getNom(){
-        if(self::isCreate()){
-            return $_SESSION["user"]["nom"];
-        }
-        return false;
-    }
-
-    public static function getPrenom(){
-        if(self::isCreate()){
-            return $_SESSION["user"]["prenom"];
         }
         return false;
     }
