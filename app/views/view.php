@@ -15,12 +15,12 @@ Création d'un site pour sauveteurdudunkerquois.fr">
     <!-- On charge les scripts css du site -->
     <?php require_once File::getApp(array("views", "element", "inject-css.php")); ?>
 </head>
-<body>
+<body class="darkmode">
 <?php require_once File::getApp(array("views", "element", "header.php")); ?>
 <div class="main">
     <?php require_once File::getApp(array("views", self::$object, "$view.php")); ?>
 </div>
-<div class="footer">
+<div class="footer" style="text-align: center">
     Site de projet de la NDI 2021 - COMA
 </div>
 
